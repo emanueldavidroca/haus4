@@ -1,0 +1,197 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+
+<!-- CONTENIDO -->
+<div class="content-wrapper">
+  <div class="row justify-content-center">
+    <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-9">
+              <div class="d-flex align-items-center align-self-start">
+                <h3 class="mb-0"><%= myrating %> <i class="fa-solid fa-star text-warning fa-lg"></i></h3>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="icon icon-box-success ">
+                <span class="mdi mdi-arrow-top-right icon-item"></span>
+              </div>
+            </div>
+          </div>
+          <h6 class="text-muted font-weight-bold">Mi califacion</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-9">
+              <div class="d-flex align-items-center align-self-start">
+                <h3 class="mb-0"><%= myresolves %> <i class="fa-solid fa-check text-orange fa-lg ms-1"></i></h3>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="icon icon-box-success">
+                <span class="mdi mdi-arrow-top-right icon-item"></span>
+              </div>
+            </div>
+          </div>
+          <h6 class="text-muted font-weight-bold">Mis reparaciones</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-9">
+              <div class="d-flex align-items-center align-self-start">
+                <h3 class="mb-0"><%= mypendings %>  <i class="fa-solid fa-hammer text-danger fa-lg ms-1"></i></h3>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="icon icon-box-success ">
+                <span class="mdi mdi-arrow-top-right icon-item"></span>
+              </div>
+            </div>
+          </div>
+          <h6 class="text-muted font-weight-bold">Mis requerimientos pendientes</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-md-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Tecnicos con mayor puntaje</h4>
+          <canvas id="barChartRating" style="height:230px"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Tecnicos con mas reparaciones</h4>
+          <canvas id="barChartResolved" style="height:230px"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../assets/vendors/chart.js/Chart.min.js"></script>
+<script>
+  $(function() {
+  /* ChartJS
+   * -------
+   * Data and config for chartjs
+   */
+  'use strict';
+  var data_rating = {
+    labels: "<%= mostRating.tecnicos %>".split(","),
+    datasets: [{
+      label: '# Puntaje',
+      data: "<%= mostRating.rating %>".split(","),
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderWidth: 1,
+      fill: false
+    }]
+  };
+  var data_resolved = {
+    labels: "<%= mostResolved.tecnicos %>".split(","),
+    datasets: [{
+      label: '# Cantidad de resueltos',
+      data: "<%= mostResolved.cantidad %>".split(","),
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderWidth: 1,
+      fill: false
+    }]
+  };
+  var options = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
+        gridLines: {
+          color: "rgba(204, 204, 204,0.1)"
+        }
+      }],
+      xAxes: [{
+        gridLines: {
+          color: "rgba(204, 204, 204,0.1)"
+        }
+      }]
+    },
+    legend: {
+      display: false
+    },
+    elements: {
+      point: {
+        radius: 0
+      }
+    }
+  };
+  // Get context with jQuery - using jQuery's .get() method.
+  if ($("#barChartResolved").length) {
+    var barChartCanvas = $("#barChartResolved").get(0).getContext("2d");
+    // This will get the first returned node in the jQuery collection.
+    var barChart = new Chart(barChartCanvas, {
+      type: 'bar',
+      data: data_resolved,
+      options: options
+    });
+  }
+  if ($("#barChartRating").length) {
+    var barChartCanvas = $("#barChartRating").get(0).getContext("2d");
+    // This will get the first returned node in the jQuery collection.
+    var barChart = new Chart(barChartCanvas, {
+      type: 'bar',
+      data: data_rating,
+      options: options
+    });
+  }
+});
+</script>
+<!-- FIN contenido -->
+<%- include("partials/footer") %>

@@ -1,0 +1,62 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="content-wrapper">
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">Lista de Tutoriales</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th> #ID </th>
+                                <th> Tutorial</th>
+                                <th> Archivo </th>
+                                <th> Tipo </th>
+                                <th class="text-center"> Acciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <%if (list_tutorials && list_tutorials.length > 0) { %>
+                                 <% list_tutorials.forEach(tut => { %> 
+    
+  
+                                    <tr>
+                                        <td> <%= tut.id %>  </td>
+                                        <td> <h4><%= tut.name %></h4></td>
+                                        <td class="text-orange"><%= tut.path %></td>
+                                        <td class="fs-6 fw-bold"><%= tut.type.dataValues.type %></td>
+                                        <td class="text-center">
+                                            <a href="/tutorials/edit/<%= tut.id %>" class="btn btn-primary">Editar</a>
+                                            <a href="/tutorials/delete/<%= tut.id %>" class="btn btn-danger">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                                <% }else{ %> 
+                                    <tr>
+                                        <td colspan="6" class="text-center"> 
+                                            Ningun tutorial encontrado.  
+                                            <a href="/tutorials/create" class="btn btn-sm btn-success px-3 ms-3">Crear tutorial</a>
+                                        </td>
+                                    </tr>
+                                <% } %> 
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!-- FIN contenido -->
+<%- include("partials/footer") %>

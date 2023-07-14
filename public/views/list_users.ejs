@@ -1,0 +1,81 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="content-wrapper">
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">Lista de Usuarios</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th> Nombre Completo </th>
+                                <th> #ID </th>
+                                <th> Email </th>
+                                <th> Usuario </th>
+                                <th class="text-center"> Estado </th>
+                                <th> Rol/Roles </th>
+                                <th class="text-center"> Acciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%if (usuarios && usuarios.length > 0) { %>
+                             <% usuarios.forEach(user => { %>
+                                <tr>
+                                    <td>
+                                        <i class="fa-solid fa-user fa-lg"></i>
+                                        <span class="ps-2"><%= user.fullName %></span>
+                                    </td>
+                                    <td> <%= user.id %>  </td>
+                                    <td> <%= user.email %> </td>
+                                    <td class="fw-bold"> <%= user.username %> </td>
+                                    <td>
+                                    <div class="d-flex justify-content-center">
+                                    <% if (user.rols.length == 0) { %>
+                                     <p class="fs-6 mb-1 fw-bold text-center"> Sin rol</p>
+                                    <% } %>
+                                    <% user.rols.forEach(r => { %>
+                                        <% if (r.dataValues.rol == "administrador") { %>
+                                            <div class="btn btn-success">ADMIN</div>
+                                        <% } %>
+                                        <% if (r.dataValues.rol == "tecnico") { %>
+                                            <div class="btn btn-warning">TECNICO</div>
+                                        <% } %>
+                                        <% if (r.dataValues.rol == "usuario") { %>
+                                            <div class="btn btn-info">USUARIO</div>
+                                        <% } %>
+                                    <% }) %>
+                                    </div>
+                                    </td>
+                                    <td> <%- (user.active == 1) ? "<div class='badge badge-outline-success'>Activo</div>" : "<div class='badge badge-outline-danger'>Inactivo</div>"; %> </td>
+                                    <td class="text-center"> <a href="/users/edit/<%= user.id %>" class="btn btn-primary">Editar</a> <a href="/users/delete/<%= user.id %>" class="btn btn-danger">Eliminar</a></td>
+                                </tr>
+                            <% }) %>
+                            <% }else{ %> 
+                                <tr>
+                                    <td colspan="6" class="text-center"> 
+                                        Ningun usuario encontrado.  
+                                        <a href="/users/create" class="btn btn-sm btn-success px-3 ms-3">Crear usuario</a>
+                                    </td>
+                                </tr>
+                            <% } %> 
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!-- FIN contenido -->
+<%- include("partials/footer") %>

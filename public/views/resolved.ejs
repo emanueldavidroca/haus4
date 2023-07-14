@@ -1,0 +1,89 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+<!-- CONTENIDO -->
+<div class="content-wrapper" id="resolved">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group">
+              <div class="row justify-content-center">
+                  <div class="idRequerement fw-bold">#<%= resolved.id %></div>
+                  <div class="col-md-10 text-center">
+                      <h3 class="card-title"><span style="font-weight: 300;">Resolucion de :</span> <span class="fw-bold">"<%= resolved.title %>"</span></h3>
+                      <hr style="width:35%;" class=" mx-auto d-block">
+                  </div>
+                  <div class="col-md-11 row">
+                    <div class="col-md-2 fs-6" style="text-transform: capitalize;">
+                      <div class="createdBy-text">
+                        Creado por: <p class="fs-5 ms-3 text-orange"><%= resolved.user.dataValues.fullName %></p>
+                      </div>
+                    </div>
+                    <div class="col-md-2 fs-6" style="text-transform: capitalize;">
+                      <div class="technician-text">
+                        Tecnico: <p class="fs-5 ms-3 text-primary"><%= resolved.technician.dataValues.fullName %></p>
+                      </div>
+                    </div>
+                      <div class="col-md-2 d-flex align-items-center">Prioridad: <%= resolved.priority %> <i class="fa-solid fa-star"></i></div>
+                      <div class="col-md-2 d-flex align-items-center fs-5" style="text-transform: capitalize;">
+                          <%= resolved.type.category.dataValues.category %> / <%= resolved.type.dataValues.type %>
+                      </div>
+                      <div class="col-md-3 d-flex align-items-center">Fecha: <%= moment(resolved.createdAt).format('Do [de] MMMM, YYYY');  %> </div>
+                </div>
+                  
+              </div>
+            </div>
+            <div class="form-group" id="description">
+              <h5 for="description">Descripcion</h5>
+              <p><%= resolved.description %></p>
+            </div>
+            <div id="anotation" >
+              <label for="">Anotaciones</label>
+              <p class="form-control"><%= resolved.anotation %></p>
+            </div>
+            <p class="text-center mt-4">No te olvides de valorar al tecnico, tu valoracion sumara en la estadistica del mismo.</p>
+            <hr class="w-25 mx-auto">
+            <form action=<%="/ratings/rating_technician/"+resolved.id+"?_method=PUT" %>  method="post" class="row justify-content-center">
+              
+                <section class="bg-light col-md-3 rounded-3 py-2 my-3">
+                    <p class="text-center text-dark fs-6">Valorar al Tecnico: <span class="fs-5 text-orange"><%= resolved.user.dataValues.fullName %></span></p>
+                      <% let rating = 0;
+                       if (resolved.rating_technician && resolved.rating_technician.dataValues.rating) {
+                        rating = resolved.rating_technician.dataValues.rating;
+                      } %>
+                      <div class="d-flex justify-content-center"  <% if(rating > 0){ %> data-rated="true" <% }%>>
+                        <button class="btn rating-btn rating_1" type="button" value="1">
+                          <i class="<% if(rating >= 1){ %> ' fa-solid ' <% } else{ %>' fa-regular '<% } %> text-warning fa-star fa-2x me-2"></i>
+                        </button>
+                        <button class="btn rating-btn rating_2" type="button" value="2">
+                          <i class="<% if(rating >= 2){ %> ' fa-solid ' <% } else{ %>' fa-regular '<% } %> text-warning fa-star fa-2x me-2"></i>
+                        </button>
+                        <button class="btn rating-btn rating_3" type="button" value="3">
+                          <i class="<% if(rating >= 3){ %> ' fa-solid ' <% } else{ %>' fa-regular '<% } %> text-warning fa-star fa-2x me-2"></i>
+                        </button>
+                        <button class="btn rating-btn rating_4" type="button" value="4">
+                          <i class="<% if(rating >= 4){ %> ' fa-solid ' <% } else{ %>' fa-regular '<% } %> text-warning fa-star fa-2x me-2"></i>
+                        </button>
+                        <button class="btn rating-btn rating_5" type="button" value="5">
+                          <i class="<% if(rating >= 5){ %> ' fa-solid ' <% } else{ %>' fa-regular '<% } %> text-warning fa-star fa-2x me-2"></i>
+                        </button>
+                    </div>
+                    <input type="hidden" id="rating_value" name="rating_value" value="-1">
+                    <input type="hidden" id="technicianId" name="technicianId" value="<%= resolved.technician.dataValues.id %>">
+                    <button class="btn btn-warning mx-auto d-block mt-4 fs-5 py-2 px-3 fw-semibold disabled" id="send-rating" type="submit"> <i class="fa-solid fa-check"></i>Valorar</button>
+                </section>
+              </form>
+          </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/resolved.js"></script>
+<!-- FIN contenido -->
+<%- include("partials/footer") %>

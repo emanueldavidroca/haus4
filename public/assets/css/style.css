@@ -1,0 +1,261 @@
+form .form-control:focus{
+    color: #fff;
+}
+.assigning{
+    border-left:2px #008a20a8 dashed !important;
+    border-top:2px #008a20a8 dashed !important;
+    border-right:2px #008a20a8 dashed !important;
+    border-bottom:2px #008a20a8 dashed !important;
+}
+.checkbox_unassigned{
+    margin-right: 5px;
+    display:inline-flex;
+    margin-top: 10px;
+    background-color: #fff;
+    color:#212529;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom: 10px;
+    width: 140px;
+    border-radius: 4px;
+}
+.createdBy-text,.technician-text{
+    border-radius: 3px;
+    background-color: #232732;
+    padding-left:5px;
+    padding-right:5px;
+}
+.createdBy-text p,.technician-text p{
+    margin-bottom: 0px;
+}
+@media (min-width: 992px){
+    .sidebar-icon-only .sidebar .sidebar-brand-wrapper .brand-logo-mini {
+        padding-left: 10px !important;
+    }
+}
+.sidebar .sidebar-brand-wrapper .sidebar-brand.brand-logo-mini img {
+    width: 100% !important;
+}
+.sidebar .brand-logo img{
+    width: 55% !important;
+    height: auto !important;
+}
+/*Select2*/
+.select2-selection{
+    height: 38px !important;
+    padding: 5px !important;
+}
+.select2-container{
+    width: 100% !important;
+}
+.select2-search__field{
+    margin-top: 0px !important;
+    line-height: 15px !important;
+}
+.select2-results{
+    background-color: #2A3038 !important;
+}
+.select2-container--default .select2-results__option--selected{
+    background-color: #353d47 !important;
+    color: #8c8c8c !important;
+    border-bottom: 1px #404a55 solid;
+    border-top: 1px #404a55 solid;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #234883 !important;
+    color: white !important;
+}
+.select2-dropdown{
+    border-bottom: 1px #3a434e solid !important;
+    border-left: 1px #3a434e solid !important;
+    border-right: 1px #3a434e solid !important;
+}
+li.select2-selection__choice{
+    margin-top: 0px !important;
+    height: 26px !important;
+    background-color: transparent !important;
+    font-size: 15px !important;
+}
+.select2-container--default .select2-selection--multiple{
+    background-color: #2A3038 !important;
+    border: 1px transparent solid;
+}
+.select2-selection__choice__remove{
+    height: 100%;
+}
+.select2-selection__choice__display{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+form .btn-wrapper{
+    margin-top: 2rem;
+}
+.btn-success{
+    background-color: #008a20;
+    border-color: #008a20;
+}
+.btn-success:hover{
+    background-color: #019a25;
+    border-color: #019a25;
+}
+form .btn-center{
+    display: block;
+    padding: 0.60rem 1.5rem;
+    margin: 0px auto 0.5rem auto;
+    font-size: 1rem;
+}
+
+textarea.form-control{
+    height: unset !important;
+}
+#container-categories button.collapsed i{
+    transition: all 0.3s;
+    transform: rotate(-90deg);
+}
+#container-categories button:not(.collapsed) i{
+    transition: all 0.3s;
+    transform: rotate(0deg);
+}
+#container-categories p{
+    margin-bottom: 0.25rem;
+}
+#container-categories ul{
+    padding-left: 55px;
+}
+#container-categories .otros ul{
+padding-left: 37px !important;
+}
+#resolveRequirements #description{
+    border: 1px grey solid;
+    padding: 10px 8px;
+    border-radius: 4px;
+    display: block;
+    margin: auto;
+    width: 90%;
+}
+#resolveRequirements form{
+    display: block;
+    margin: auto;
+    width: 90%;
+    padding: 25px 45px;
+}
+#resolveRequirements .resolve_option{
+    display: flex;
+    justify-content: center;
+}
+#resolveRequirements .resolve_option .btn-tutorial{
+    background-color: #0090E7;
+    color: #fff;
+}
+#resolveRequirements .resolve_option .btn-tutorial.active{
+    background-color: #d10606;
+}
+#resolveRequirements .resolve_option .btn-tutorial.active::before{
+    content: "X ";
+}
+
+#resolveRequirements #anotation,#resolveRequirements #description{
+    width: 90%;
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    background-color: #f2f2f2;
+}
+#resolveRequirements #anotation label,#resolveRequirements #description label{
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+#resolveRequirements #anotation textarea,#resolveRequirements #description textarea{
+    min-height: 140px;
+    border-radius: 4px;
+}
+
+#resolved #description{
+    border: 1px grey solid;
+    padding: 10px 8px;
+    border-radius: 4px;
+    display: block;
+    margin: auto;
+    width: 90%;
+}
+#resolved #anotation,#resolved #description{
+    width: 90%;
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    background-color: #242834;
+}
+#resolved #anotation label,#resolved #description label{
+    margin: 10px;
+}
+#resolved #anotation p,#resolved #description p{
+    min-height: 140px;
+    border-radius: 4px;
+}
+#resolved .rating-btn{
+    /*filter: 
+    drop-shadow(-1px -1px 0px #FFC107) 
+    drop-shadow(1px -1px 0px #FFC107) 
+    drop-shadow(1px 1px 0px #FFC107)
+    drop-shadow(-1px 1px 0px #FFC107);*/
+}
+
+
+#section-tutorial .select2-selection:focus{
+    color: #212529 !important;
+}
+#resolveRequirements #tutorial-wrapper{
+    width: 80%;
+    display: block;
+    margin: auto;
+    position: relative;
+}
+#resolveRequirements #tutorial-wrapper #icon-check{
+    position:absolute;
+    top: 2px;
+    left: -35px;
+    display: none;
+    /*border: 1px #008A20 solid;
+    border-radius: 3px;*/
+}
+#resolveRequirements #tutorial-wrapper #icon-check.show{
+    display: block;
+}
+#resolveRequirements #section-tutorial{
+    border: 2px  #0090E7 solid;
+    border-radius: 4px;
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+    width: 90%;
+    margin: auto;
+    display: block;
+}
+#resolveRequirements #section-tutorial .select2{
+    width: 100% !important;
+    display: block;
+    margin: 15px auto;
+}
+#resolveRequirements #section-tutorial button{
+    border: 2px #0090E7 solid;
+    font-size: 16px;
+    color: #0090E7;
+    margin: 10px auto;
+    display: block;
+    font-weight: bold;
+    transition: all 0.35s;
+}
+#resolveRequirements #section-tutorial button:hover{
+    background-color: #0090E7 !important;
+    color: #fff !important;
+}
+#resolveRequirements #section-tutorial p{
+    text-align: center;
+    color: #fff;
+    background-color: #0090E7;
+    width: 100%;
+    font-weight: 500;
+}

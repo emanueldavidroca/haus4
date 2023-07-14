@@ -1,0 +1,95 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+<script>
+    function filter_requirements(element){
+    let todos = document.querySelectorAll("table tr.todos");
+    todos.forEach(t => {
+        console.log(t);
+        if(element.checked){
+            t.classList.add("d-none");
+        }
+        else{
+            t.classList.remove("d-none");
+        }
+    });
+}
+</script>
+<div class="main-panel">
+    <!-- CONTENIDO -->
+    <div class="content-wrapper">
+        <div class="row ">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                    <div class="mb-3 d-flex justify-content-center">
+                        <input type="checkbox" onclick="filter_requirements(this)" name="filter_requirements" class="me-2"> <label for="">Mis requerimientos</label>
+                    </div>
+                    <h4 class="card-title">Lista de Requerimientos</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th> #ID </th>
+                                <th> Titulo </th>
+                                <th> Prioridad </th>
+                                <th> Tecnico </th>
+                                <th> Creado por </th>
+                                <th> Categoria/Tipo </th>
+                                <th> Estado </th>
+                                <th class="text-center"> Acciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%if (list_requirements && list_requirements.length > 0) { %>
+                             <% list_requirements.forEach(reque => { %> 
+
+                                <%if (reque.userId == session.idUser) { %>
+                                    <tr class="mio">
+                                <% }else{ %>
+                                    <tr class="todos">
+                                <% } %>
+                                
+                                    <td> <%= reque.id %>  </td>
+                                    <td> <h4><%= reque.title %></h4></td>
+                                    <td><%= reque.priority %> </td>
+                                    <td class="fs-6 fw-bold" style="text-transform: capitalize;"><%= reque.technician.dataValues.fullName %></td>
+                                    <td class="fs-6 fw-bold" style="text-transform: capitalize;"><%= reque.user.dataValues.fullName %></td>
+                                    <td class="fs-6"><%= reque.type.category.dataValues.category %> / <%= reque.type.dataValues.type %></td>
+                                    <td class="fs-6">
+                                        <% if(reque.status == "tutorial_sent"){ %> 
+                                            <span class="text-warning">Tutorial enviado</span> 
+                                        <% } %>
+                                        <% if(reque.status == "resolved"){%>
+                                            <span class="text-orange">Resuelto</span> 
+                                        <% } %>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="/requirements/resolved/<%= reque.id %>" class="btn btn-success">Ver</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                            <% }else{ %> 
+                                <tr>
+                                    <td colspan="6" class="text-center"> 
+                                        Ningun requerimiento encontrado.  
+                                        <a href="/requirements/create" class="btn btn-sm btn-success px-3 ms-3">Crear requerimiento</a>
+                                    </td>
+                                </tr>
+                            <% } %> 
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!-- FIN contenido -->
+<%- include("partials/footer") %>

@@ -1,0 +1,206 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+
+<!--  <script>
+    $(".js-example-basic-multiple-limit").select2({
+        maximumSelectionLength: 2
+        });
+</script>-->
+<!-- CONTENIDO -->
+<div class="row px-4 gx-2 pt-3"style="background-color: black;">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body pb-2">
+                <% if(typeof usuario != "undefined"){ %>
+                    <h3 class="card-title text-orange">Editar Categoria</h3>
+                <% }else{%> 
+                    <h3 class="card-title text-orange">Crear Categoria</h3>
+                <% }%> 
+                <form class="form-sample" action=<%= typeof category != "undefined" ? "/categoriesTypes/edit/"+category.id+"?_method=PUT" : "/categoriesTypes/create_category" %>  method="post">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Nombre de categoria</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="category" value='<%= typeof usuario != "undefined" && usuario.fullName ? usuario.fullName : "" %>' />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <% if(typeof usuario != "undefined"){ %>
+                            <button type="submit" class="btn btn-primary btn-center">Editar</button>
+                        <% }else{%> 
+                            <button type="submit" class="btn btn-success btn-center">Crear</button>
+                        <% }%> 
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body pb-2">
+                <% if(typeof usuario != "undefined"){ %>
+                    <h3 class="card-title text-orange">Editar Tipo</h3>
+                <% }else{%> 
+                    <h3 class="card-title text-orange">Crear Tipo</h3>
+                <% }%> 
+                <form class="form-sample" action=<%= typeof type != "undefined" ? "/categoriesTypes/edit/"+type.id+"?_method=PUT" : "/categoriesTypes/create_type" %>  method="post">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Nombre de Tipo</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="nameType" value='<%= typeof type != "undefined" && type.nameType? type.nameType: "" %>' />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <% if(typeof type != "undefined"){ %>
+                            <button type="submit" class="btn btn-primary btn-center">Editar</button>
+                        <% }else{%> 
+                            <button type="submit" class="btn btn-success btn-center">Crear</button>
+                        <% }%> 
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row px-4 gx-0 pt-3" id="types_uncategorized" style="background-color: black;">
+    <div class="col-12 card">
+        <div class="p-3" id="types_uncategorized_wrapper">
+            <p class="fs-5 text-warning">Tipos sin asignar</p>
+            <% types_uncategorized.forEach(t => { %>
+                <div class="checkbox_unassigned">
+                    <input type="checkbox" class="form-check-input border-dark" id="<%= t.type %>" name="types" disabled value="<%= t.id %>"/>
+                    <label class="w-100" for="<%= t.type %>"><%= t.type %></label>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+<div class="row px-4 gx-0 pt-3" style="background-color: black;">
+    <div class="col-12 card ">
+        <form class="p-3 row" action="/categoriesTypes/assign_types" method="post">
+            <% categorias.forEach(cat => { %>
+                <div class="col-md-2 border-end border-2 border-color-dark">
+                    <p class="fs-5 mb-2"><%= cat.category.toUpperCase() %></p>
+                    <% cat.dataValues.types.forEach(t => { %>
+                        <div class="ms-4">
+                            <input type="checkbox" name="types['<%= cat.id %>']" checked value="<%= t.id %>"/>
+                            <label for=""><%= t.type %></label>
+                        </div>
+                    <% }) %>
+                    <div class="new_types" data-category="<%= cat.id %>"></div>
+                        <button class="btn btn-danger d-block mx-auto mt-3 cancel_types_btn d-none" type="button" name="new_types_btn" value="<%= cat.id %>">Cancelar</button>
+                        <button class="btn btn-success d-block mx-auto mt-3 new_types_btn" type="button" name="new_types_btn" value="<%= cat.id %>">+ TIPO</button>
+                </div>
+            <% }) %>
+            <div class="col-12 mt-3"><button class="btn btn-primary mx-auto d-block" type="submit">CONFIRMAR CAMBIOS</button></div>
+        </form>
+    </div>
+</div>
+<script>
+    let asigning_type = false; 
+    let btn_add = document.querySelectorAll(".new_types_btn");
+    //SELECIONANDO checkbox de tipo sin asignar
+    let checkbox_form = document.querySelectorAll("form input[type='checkbox']");
+    let contenedor = document.querySelector("#types_uncategorized_wrapper");
+
+    //AL DESHABILITAR UN checkbox de tipo ya asignado (los que vienen al cargar la pagina)
+    checkbox_form.forEach(check_f => {
+        check_f.addEventListener("change",(c)=>{
+            if(check_f.checked == false){
+                let check = document.createElement("input");
+                check.type = "checkbox";
+                check.value = check_f.value;
+                if(asigning_type == false) check.disabled = true;
+                check.checked = false;
+                check.name = "types";
+                check.classList.add("form-check-input","border-dark");
+                check.addEventListener("click",(c)=>{
+                    add_unassigned(check_f);
+                });
+                let label = document.createElement("label");
+                label.textContent = check_f.parentNode.querySelector("label").textContent;
+                let div = document.createElement("div");
+                div.classList.add("checkbox_unassigned");
+                div.appendChild(check);
+                div.appendChild(label);
+                contenedor.appendChild(div);
+                check_f.parentNode.remove();
+            }
+        })
+    });
+    let checkbox_tipos = document.querySelectorAll(".form-check-input");
+    checkbox_tipos.forEach(checks => {
+        checks.addEventListener("click",(c)=>{
+        add_unassigned(checks);
+        });
+    });
+    function add_unassigned(checkbox){
+        let check = document.createElement("input");
+        check.type = "checkbox";
+        check.value = checkbox.value;
+        check.checked = true;
+        check.name = "types['"+asigning_type.dataset.category+"']";
+        check.classList.remove("form-check-input");
+        let label = document.createElement("label");
+        label.textContent = checkbox.parentNode.querySelector("label").textContent;
+        let div = document.createElement("div");
+        div.classList.add("ms-4");
+        div.appendChild(check);
+        div.appendChild(label);
+        asigning_type.appendChild(div);
+    }
+    function vaciar_nuevos_tipos(){
+        if(asigning_type != false) asigning_type.parentNode.classList.remove("assigning");
+        let check = document.querySelectorAll("#types_uncategorized input");
+        check.forEach((c)=>{
+            c.setAttribute("disabled","");
+        });
+    }
+    //ASIGNAR TIPO
+    btn_add.forEach((btn)=>{
+        btn.addEventListener("click",(b)=>{
+            vaciar_nuevos_tipos();
+            asigning_type = btn.parentNode.querySelector(".new_types");
+            btn.parentNode.classList.add("assigning");
+            let otros_cancel = document.querySelectorAll(".cancel_types_btn");
+            otros_cancel.forEach(o => {
+                if(o.value != btn.value){
+                    o.classList.add("d-none");
+                    o.parentElement.querySelector(".new_types_btn").classList.remove("d-none");
+                }
+            });
+            let check = document.querySelectorAll("#types_uncategorized input");
+            check.forEach((c)=>{
+                c.removeAttribute("disabled");
+            });
+            btn.parentNode.querySelector(".cancel_types_btn").classList.remove("d-none");
+            btn.classList.add("d-none");
+        });
+    });
+    let btn_cancel = document.querySelectorAll(".cancel_types_btn");
+    //CANCELAR ASIGNAR
+    btn_cancel.forEach((btn)=>{
+        btn.addEventListener("click",(b)=>{
+            btn.parentNode.querySelector(".new_types_btn").classList.remove("d-none");
+            btn.classList.add("d-none");
+            vaciar_nuevos_tipos();
+        });
+    });
+</script>
+<!-- FIN contenido -->
+<%- include("partials/footer") %>

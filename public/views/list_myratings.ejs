@@ -1,0 +1,57 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="content-wrapper">
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">Valoraciones de mis Reparaciones</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th> Usuario que califico </th>
+                                <th> Requerimiento </th>
+                                <th> Valoracion </th>
+                                <th> Fecha </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%if (list_ratings && list_ratings.length > 0) { %>
+                                <% list_ratings.forEach(rat => { %> 
+
+                                    <tr>
+                                        <%= console.log(rat)%>
+                                       <td> <%= rat.user.dataValues.fullName %>  </td>
+                                       <td ><h4 class="fs-6 fw-bold" style="text-transform: capitalize;"><%= rat.requirement.title %></h4></td>
+                                       <td> <i class="fa-solid fa-star text-warning"></i> <%= rat.rating %> </td>
+                                       <td ><%= rat.createdAt %></td>
+
+                                   </tr>
+                               <% }) %>
+                               <% }else{ %> 
+                                   <tr>
+                                       <td colspan="6" class="text-center"> 
+                                           Ninguna valoracion encontrada.  
+                                       </td>
+                                   </tr>
+                               <% } %> 
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!-- FIN contenido -->
+<%- include("partials/footer") %>

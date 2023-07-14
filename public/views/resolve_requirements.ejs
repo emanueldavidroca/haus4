@@ -1,0 +1,113 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+<!-- CONTENIDO -->
+<div class="content-wrapper" id="resolveRequirements">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <% if(typeof edit != "undefined"){ %>
+              <h3 class="card-title">Editar Resolucion</h3>
+            <% }else{%> 
+              <h3 class="card-title">Resolver Requerimiento</h3>
+            <% }%> 
+            <form class="forms-sample bg-light text-dark" action=<%="/requirements/resolve/"+resolve.id+"?_method=PUT" %>  method="post">
+              <div class="form-group">
+                <h2 style="text-transform: capitalize;" class=" text-primary"><%= resolve.title %></h2>
+                <div class="row">
+                    <div class="col-md-4">Prioridad: <%= resolve.priority %> <i class="fa-solid fa-star"></i></div>
+                    <div class="col-md-4 fs-5" style="text-transform: capitalize;">
+                        <%= resolve.type.category.dataValues.category %> / <%= resolve.type.dataValues.type %>
+                    </div>
+                    <div class="col-md-4">Fecha: <%= resolve.createdAt %> </div>
+                </div>
+              </div>
+              <div class="form-group" id="description">
+                <h5 for="description">Descripcion</h5>
+                <p><%= typeof edit != "undefined" && edit.edit ? edit.description : resolve.description %></p>
+              </div>
+              
+              <div id="anotation" >
+                <label for="">Anotacion</label>
+                <textarea name="anotation" class="form-control" placeholder="Anotacion.."><%= resolve.anotation %></textarea>
+                
+              </div>
+              <div class="resolve_option">
+                <button class="btn me-2 btn-tutorial" type="button" onclick="show_enviarTutorial(this)">Enviar Tutorial</button>
+                <button class="btn btn-success" type="submit" name="send_resolved" value="true">Marcar Resuelto</button>
+              </div>
+              <div class="d-none" id="section-tutorial">
+                <p class="fs-5">Enviar un tutorial.</p>
+                <div id="tutorial-wrapper">
+                  <i class="fa-solid fa-check text-orange fa-2x" id="icon-check"></i>
+                  <select name="tutorial" id="tutorial">
+                    <option value="Seleccionar.." selected hidden>Seleccionar..</option>
+                    <% tutoriales.forEach(tut => { %>
+                    <option value="<%= tut.id  %>"><%= tut.name  %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <button class="btn disabled" type="submit" name="send_tutorial" value="true"><i class="fa-solid fa-file-pdf"></i> Enviar tutorial</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+</div>
+<script>
+      function show_enviarTutorial(element){
+        let tutorial = document.querySelector("#section-tutorial");
+        //apaga
+        if(element.classList.contains("active")){
+          element.classList.remove("active");
+          tutorial.classList.add("d-none");
+
+        }
+        //prende
+        else{
+          element.classList.add("active");
+          tutorial.classList.remove("d-none");
+        }
+          
+      }
+    window.onload= ()=>{
+      $("#tutorial").select2({
+            placeholder: 'Seleccionar...',
+            allowClear: false
+        });
+      $("#create_user_rols").select2({
+            multiple:true,
+            maximumSelectionLength: 5,
+            placeholder: 'Seleccionar rol',
+            allowClear: true
+        });
+        $('#tutorial').on('select2:select', function (e) {
+            let icon = document.querySelector("#tutorial-wrapper #icon-check");
+            let btn = document.querySelector("#section-tutorial button");
+            btn.classList.remove("disabled");
+            icon.classList.add("show")
+        });
+        let checkboxes = document.querySelectorAll("#container-categories ul li input");
+        checkboxes.forEach((check)=>{
+          let current = check.value;
+          check.addEventListener("click",()=>{
+            checkboxes.forEach((c)=>{
+              if(c.value != current){
+                c.checked = false;
+              }
+            });
+          })
+        });
+    }
+    
+</script>
+
+<!-- FIN contenido -->
+<%- include("partials/footer") %>

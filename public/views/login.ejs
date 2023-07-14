@@ -1,0 +1,35 @@
+<%- include("./partials/head") %>
+
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100 m-0">
+            <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                <div class="card col-lg-4 mx-auto">
+                    <div class="card-body px-5 py-5">
+                    <h3 class=" text-left mb-3">Bienvenido a Haus4</h3>
+                    <form action="/users/login" method="post">
+                        <% if (typeof error != "undefined" && error == true) { %>
+                            <p class="text-danger">Datos incorrectos , vuelva a intentar</p>
+                        <% } %> 
+                        <div class="form-group">
+                        <label>Email *</label>
+                        <input type="text" name="email" class="form-control p_input">
+                        </div>
+                        <div class="form-group">
+                        <label>Password *</label>
+                        <input type="password" name="password" class="form-control p_input">
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-between">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input"> Remember me </label>
+                        </div>
+                        </div>
+                        <div class="text-center">
+                        <button type="submit" class="btn btn-orange btn-block enter-btn btn-center">Login</button>
+                        </div>
+                    </form>
+                    </div>
+            </div>
+        </div>
+<%- include("./partials/footer") %>
