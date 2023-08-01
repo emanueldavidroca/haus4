@@ -19,32 +19,27 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            <% if(typeof requerimiento != "undefined"){ %>
-              <h3 class="card-title">Editar Requerimiento</h3>
+            <% if(typeof dispositivo != "undefined"){ %>
+              <h3 class="card-title">Editar conexion de Dispositivo</h3>
             <% }else{%> 
-              <h3 class="card-title">Crear Requerimiento</h3>
+              <h3 class="card-title">Conectar Dispositivo</h3>
             <% }%> 
-            <form class="forms-sample" action=<%= typeof requerimiento != "undefined" ? "/requirements/edit/"+requerimiento.id+"?_method=PUT" : "/requirements/create" %>  method="post">
-              <div class="form-group">
-                <label for="title">Titulo</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="titulo" value='<%= typeof requerimiento != "undefined" && requerimiento.title ? requerimiento.title : "" %>'>
-              </div>
-              <div class="form-group">
-                <label for="description">Descripcion</label>
-                <textarea class="form-control" id="descripcion" name="description" rows="6"><%= typeof requerimiento != "undefined" && requerimiento.description ? requerimiento.description : "" %></textarea>
-              </div>
+            <form class="forms-sample" action=<%= typeof dispositivo != "undefined" ? "/hardwares/edit/"+dispositivo.id+"?_method=PUT" : "/hardwares/create" %>  method="post">
+              
               <div id="container-categories">
                 <label for="">Categoria</label>
                 <% categorias.forEach(cat => { %>
                   <p>
                     <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<%= cat.category %>Collapse" aria-expanded="false" aria-controls="<%= cat.category %>Collapse">
-                      <label for="<%= cat.category %>"><i class="fa-solid fa-chevron-down"></i> <input type="checkbox" id="<%= cat.category %>" <%=  typeof categoria != "undefined" && categoria == "hardware" ? " checked " : "" %>> <%= cat.category %></label>  
+                      <label for="<%= cat.category %>"><i class="fa-solid fa-chevron-down"></i> <input type="checkbox" id="<%= cat.category %>" <%=  typeof categoria != "undefined" && categoria == cat.category ? " checked " : "" %>> <%= cat.category %></label>  
                     </button>
                   </p>
                   <div class="collapse <%= typeof categoria != "undefined" && categoria == 'hardware' ? ' show ' : '' %>" id="<%= cat.category %>Collapse">
                     <ul style="list-style: none;">
                       <% cat.types.forEach(t => { %>
-                        <li style="text-transform:capitalize"><input type="checkbox" <%=  typeof requerimiento != "undefined" && requerimiento.typeId == t.id ? ' checked ' : '' %> name="typeId" value="<%= t.id %>"> <%= t.type %> </li>
+                        <li style="text-transform:capitalize">
+                          <input type="checkbox" class="typeCheckbox" <%=  typeof dispositivo != "undefined" && dispositivo.typeId == t.id ? ' checked ' : '' %> name="typeId" value="<%= t.id %>"> <%= t.type %> 
+                        </li>
                       <% }) %>
                     </ul>
                   </div>
@@ -52,12 +47,21 @@
               
               </div>
               <div class="form-group">
+                <label for="title">Elegir dispositivo</label>
+                <select name="hardware" id="selectHardware">
+                  <option value="-1">Elegir dispositivo</option>
+                    <% hardwares_av.forEach( av => {%>
+                      <option <%=  typeof dispositivo != "undefined" && dispositivo.hardwaresAvailableId == av.id ? '' : 'style=display:none;' %>  value="<%= av.id %>" class="type<%= av.typeId%>"><%= av.hardware_name  %></option>
+                    <%}) %>
+                </select>
+              </div>
+              <div class="form-group">
                 <label for="userId">Asignar Tecnico <i class="fa-solid fa-user text-primary"></i></label>
                 <select class="form-control" id="technicianId" name="technicianId">
                   <option disabled selected>Seleccionar un tecnico</option>
                   <% if(technician && technician.length > 0){ %> 
                     <% technician.forEach(tec => { %>
-                      <option value="<%= tec.id %>" <%=  typeof requerimiento != "undefined" && requerimiento.technicianId == tec.id ? ' selected ' : '' %>><%= tec.fullName %></option>
+                      <option value="<%= tec.id %>" <%=  typeof dispositivo != "undefined" && dispositivo.technicianId == tec.id ? ' selected ' : '' %>><%= tec.fullName %></option>
                     <% }) %>
                   <% } %> 
                 </select>
@@ -67,11 +71,11 @@
                 <select class="form-control" id="priority" name="priority">
                   <option value="-1">Seleccionar una prioridad</option>
                   <% for( let i = 1; i < 11; i++ ) { %>
-                    <option value="<%= i %>" <%= typeof requerimiento != "undefined" && requerimiento.priority && requerimiento.priority == i ? " selected " : "" %>><%= i %></option>
+                    <option value="<%= i %>" <%= typeof dispositivo != "undefined" && dispositivo.priority && dispositivo.priority == i ? " selected " : "" %>><%= i %></option>
                   <% } %>
                 </select>
               </div>
-              <% if(typeof requerimiento != "undefined"){ %>
+              <% if(typeof dispositivo != "undefined"){ %>
                 <button type="submit" class="btn btn-primary btn-center">Editar</button>
               <% }else{%> 
                   <button type="submit" class="btn btn-success btn-center">Crear</button>
@@ -93,8 +97,22 @@
         checkboxes.forEach((check)=>{
           let current = check.value;
           check.addEventListener("click",()=>{
+
+            let opciones = document.querySelector("#selectHardware").options;
+            Array.prototype.forEach.call(opciones, opcion => {
+              if(opcion.value != "-1"){
+                if(opcion.classList.contains("type"+check.value)){
+                  opcion.style.display = "block";
+                }
+                else{
+                  opcion.style.display = "none";
+                }
+              }
+              else{
+                opcion.selected = true;
+              }
+            });
             checkboxes.forEach((c)=>{
-              console.log(current);
               if(c.value != current){
                 c.checked = false;
               }

@@ -1,0 +1,78 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+<script>
+    function filter_hardwares(element){
+    let todos = document.querySelectorAll("table tr.todos");
+    todos.forEach(t => {
+        if(element.checked){
+            t.classList.add("d-none");
+        }
+        else{
+            t.classList.remove("d-none");
+        }
+    });
+}
+</script>
+<div class="main-panel">
+    <!-- CONTENIDO -->
+    <div class="content-wrapper">
+        <div class="row ">
+            <div class="col-10 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                    <div class="mb-3 d-flex justify-content-center">
+                        <input type="checkbox" onclick="filter_hardwares(this)" name="filter_hardwares" class="me-2"> <label for="">Mis Dispositivos</label>
+                    </div>
+                    <h4 class="card-title">Lista de Dispositivos</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th> #ID </th>
+                                <th> Nombre de dispositivo </th>
+                                <th> Temperatura arranque: FRIO </th>
+                                <th> Temperatura arranque: CALOR </th>
+                                <th> Categoria/Tipo </th>
+                                <!--<th class="text-center"> Acciones </th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%if (list_hardwares_available && list_hardwares_available.length > 0) { %>
+                             <% list_hardwares_available.forEach(hard_available => { %> 
+                                <tr class="todos">
+                                    <td> <%= hard_available.id %>  </td>
+                                    <td> <h4><%= hard_available.hardware_name %></h4></td>
+                                    <td> <h4><%= hard_available.startingColdTemp %></h4></td>
+                                    <td> <h4><%= hard_available.startingWarmTemp %></h4></td>
+                                    <td class="fs-6"><%= hard_available.type.category.dataValues.category %> / <%= hard_available.type.dataValues.type ?? "" %></td>
+                                    <!--<td class="text-center">
+                                        <a href="/hardwaresAvailable/edit/<%= hard_available.id %>" class="btn btn-primary">Editar</a>
+                                        <a href="/hardwaresAvailable/delete/<%= hard_available.id %>" class="btn btn-danger">Eliminar</a>
+                                    </td>-->
+                                </tr>
+                            <% }) %>
+                            <% }else{ %> 
+                                <tr>
+                                    <td colspan="6" class="text-center"> 
+                                        Ningun dispositivo encontrado.  
+                                        <a href="/hardwaresAvailable/create" class="btn btn-sm btn-success px-3 ms-3">Crear dispositivo</a>
+                                    </td>
+                                </tr>
+                            <% } %> 
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!-- FIN contenido -->
+<%- include("partials/footer") %>

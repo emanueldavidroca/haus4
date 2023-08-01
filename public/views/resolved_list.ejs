@@ -8,7 +8,7 @@
     <%- include("./partials/navbar") %>
     <!-- partial -->
 <script>
-    function filter_requirements(element){
+    function filter_hardwares(element){
     let todos = document.querySelectorAll("table tr.todos");
     todos.forEach(t => {
         console.log(t);
@@ -29,9 +29,9 @@
                 <div class="card">
                     <div class="card-body">
                     <div class="mb-3 d-flex justify-content-center">
-                        <input type="checkbox" onclick="filter_requirements(this)" name="filter_requirements" class="me-2"> <label for="">Mis requerimientos</label>
+                        <input type="checkbox" onclick="filter_hardwares(this)" name="filter_hardwares" class="me-2"> <label for="">Mis Dispositivos</label>
                     </div>
-                    <h4 class="card-title">Lista de Requerimientos</h4>
+                    <h4 class="card-title">Lista de Dispositivos</h4>
                     <div class="table-responsive">
                         <table class="table">
                         <thead>
@@ -47,8 +47,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%if (list_requirements && list_requirements.length > 0) { %>
-                             <% list_requirements.forEach(reque => { %> 
+                            <%if (list_hardwares && list_hardwares.length > 0) { %>
+                             <% list_hardwares.forEach(reque => { %> 
 
                                 <%if (reque.userId == session.idUser) { %>
                                     <tr class="mio">
@@ -71,15 +71,15 @@
                                         <% } %>
                                     </td>
                                     <td class="text-center">
-                                        <a href="/requirements/resolved/<%= reque.id %>" class="btn btn-success">Ver</a>
+                                        <a href="/hardwares/resolved/<%= reque.id %>" class="btn btn-success">Ver</a>
                                     </td>
                                 </tr>
                             <% }) %>
                             <% }else{ %> 
                                 <tr>
                                     <td colspan="6" class="text-center"> 
-                                        Ningun requerimiento encontrado.  
-                                        <a href="/requirements/create" class="btn btn-sm btn-success px-3 ms-3">Crear requerimiento</a>
+                                        Ningun Dispositivos encontrado.  
+                                        <a href="/hardwares/create" class="btn btn-sm btn-success px-3 ms-3">Crear Dispositivos</a>
                                     </td>
                                 </tr>
                             <% } %> 

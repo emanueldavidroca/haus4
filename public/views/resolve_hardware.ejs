@@ -9,7 +9,7 @@
     <!-- partial -->
     <div class="main-panel">
 <!-- CONTENIDO -->
-<div class="content-wrapper" id="resolveRequirements">
+<div class="content-wrapper" id="resolvehardwares">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
@@ -18,7 +18,7 @@
             <% }else{%> 
               <h3 class="card-title">Resolver Requerimiento</h3>
             <% }%> 
-            <form class="forms-sample bg-light text-dark" action=<%="/requirements/resolve/"+resolve.id+"?_method=PUT" %>  method="post">
+            <form class="forms-sample bg-light text-dark" action=<%="/hardwares/resolve/"+resolve.id+"?_method=PUT" %>  method="post">
               <div class="form-group">
                 <h2 style="text-transform: capitalize;" class=" text-primary"><%= resolve.title %></h2>
                 <div class="row">

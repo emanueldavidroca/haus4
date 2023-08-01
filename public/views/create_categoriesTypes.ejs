@@ -121,6 +121,9 @@
     //AL DESHABILITAR UN checkbox de tipo ya asignado (los que vienen al cargar la pagina)
     checkbox_form.forEach(check_f => {
         check_f.addEventListener("change",(c)=>{
+            if(check_f.checked == true){
+                check_f.style.pointerEvent = "none";
+            }
             if(check_f.checked == false){
                 let check = document.createElement("input");
                 check.type = "checkbox";
@@ -146,7 +149,9 @@
     let checkbox_tipos = document.querySelectorAll(".form-check-input");
     checkbox_tipos.forEach(checks => {
         checks.addEventListener("click",(c)=>{
-        add_unassigned(checks);
+            if(checks.checked == true){
+                add_unassigned(checks);
+            }
         });
     });
     function add_unassigned(checkbox){
@@ -163,6 +168,12 @@
         div.appendChild(check);
         div.appendChild(label);
         asigning_type.appendChild(div);
+        check.addEventListener("click",()=>{
+            if(check.checked == false){
+                check.parentNode.remove();
+                document.querySelector("[value='"+check.value+"']").checked = false;
+            }
+        });
     }
     function vaciar_nuevos_tipos(){
         if(asigning_type != false) asigning_type.parentNode.classList.remove("assigning");

@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       users.belongsToMany(models.rols,{through:"Rolusers"});
-      users.hasOne(models.requirements,{foreignKey:"technicianId"});
-      users.hasOne(models.requirements,{foreignKey:"userId"});
+      users.hasOne(models.hardwares,{foreignKey:"technicianId"});
+      users.hasOne(models.hardwares,{foreignKey:"userId"});
       users.hasOne(models.rating_technicians,{foreignKey:"ratedBy"});
       users.hasOne(models.rating_technicians,{foreignKey:"technicianId"});
     }

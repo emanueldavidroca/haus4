@@ -1,23 +1,23 @@
 const session = require("express-session");
-const {users,rols,rolusers,requirements,rating_technicians} = require("../database/models");
+const {users,rols,rolusers,hardwares,rating_technicians} = require("../database/models");
 const { Op ,Sequelize} = require("sequelize");
 let reportsController = {
     index:async (req,res)=>{
         sess = req.session;
-        let myresolves = await requirements.findAll({where: {
+        let myresolves = await hardwares.findAll({where: {
             technicianId:sess.idUser,
             [Op.or]: [
                 { status: "resolved" },
                 { status: "tutorial_sent" },
             ],
         }});
-        let mypendings = await requirements.findAll({where: {
+        let mypendings = await hardwares.findAll({where: {
             technicianId:sess.idUser,
             [Op.or]: [
                 { status: "pending" },
             ],
         }});
-        let myrating = await rating_technicians.findAll({include:{model:requirements,where:{technicianId: sess.idUser}}});
+        let myrating = await rating_technicians.findAll({include:{model:hardwares,where:{technicianId: sess.idUser}}});
         let total = 0;
         myrating.forEach(rat => {
             total += rat.rating;
@@ -28,7 +28,7 @@ let reportsController = {
             ,attributes: {include: [[Sequelize.fn("AVG", Sequelize.col("rating")), "estrellas"]]}
         });
 
-        let mostResolved_result = await requirements.findAll({
+        let mostResolved_result = await hardwares.findAll({
         where: {
             [Op.or]: [
                 { status: "resolved" },
@@ -36,9 +36,9 @@ let reportsController = {
             ],
         }
         ,limit:6
-        ,group:["requirements.technicianId"]
+        ,group:["hardwares.technicianId"]
         ,include:[{model: users,attributes:["fullName"],required:true,as:"technician"}]
-        ,attributes: {include: [[Sequelize.fn("COUNT", Sequelize.col("requirements.id")), "cantidad"]]}});
+        ,attributes: {include: [[Sequelize.fn("COUNT", Sequelize.col("hardwares.id")), "cantidad"]]}});
         let mostRating = {tecnicos: [],rating:[]};
         let mostResolved = {tecnicos: [],cantidad:[]};
 

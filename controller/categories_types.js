@@ -27,14 +27,20 @@ let categoriesTypesController = {
     },
     assign_types: async(req, res) => {
         await types.update({categoryId:0},{where:{id:{[Op.ne]: null}}});
-        
+
         Object.entries(req.body).forEach(entry => {
             const [key, value] = entry;
-            console.log(value);
-            value.forEach(tipo => {
+            if(typeof value != Array){
                 let categoryId = key.split("'");
-                types.update({categoryId:categoryId[1]},{where:{id:tipo}}).then((data)=>{});
-            });
+                types.update({categoryId:categoryId[1]},{where:{id:value}}).then((data)=>{});
+            }
+            else{
+                Array.prototype.forEach.call(value, tipo => {
+                    let categoryId = key.split("'");
+                    types.update({categoryId:categoryId[1]},{where:{id:tipo}}).then((data)=>{});
+                });
+            }
+            
           });
           setTimeout(()=>{
             res.redirect("/categoriesTypes/create");

@@ -1,8 +1,8 @@
 <!-- partial:partials/_sidebar.html -->
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
 <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-    <a class="sidebar-brand brand-logo" href="index.html"><img src="/assets/corona_assets/images/logo_haus4.png" alt="logo" /></a>
-    <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="/assets/corona_assets/images/logo_haus4.png" alt="logo" /></a>
+    <a class="sidebar-brand brand-logo" href=""><img src="/assets/corona_assets/images/logo_haus4.png" alt="logo" /></a>
+    <a class="sidebar-brand brand-logo-mini" href=""><img src="/assets/corona_assets/images/logo_haus4.png" alt="logo" /></a>
 </div>
 <ul class="nav">
     <li class="nav-item profile">
@@ -54,26 +54,45 @@
     </a>
     </li>
     <li class="nav-item menu-items">
-    <a class="nav-link" data-bs-toggle="collapse" href="#requirements" aria-expanded="false" aria-controls="requirements">
-        <span class="menu-icon">
-        <i class="mdi mdi-laptop"></i>
-        </span>
-        <span class="menu-title">Requerimientos</span>
-        <i class="menu-arrow"></i>
-    </a>
-    <div class="collapse" id="requirements">
-        <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="/requirements/create">
-                <i class="fa-solid fa-chevron-right fa-sm me-1"></i> Crear</a>
-            </li>
-            <li class="nav-item"> <a class="nav-link" href="/requirements/list">
-                <i class="fa-solid fa-chevron-right fa-sm me-1"></i> Lista</a>
-            </li>
-            <li class="nav-item"> <a class="nav-link" href="/requirements/resolved_list">
-                <i class="fa-solid fa-chevron-right fa-sm me-1"></i> List de Resueltos</a>
-            </li>
-        </ul>
-    </div>
+        <a class="nav-link" data-bs-toggle="collapse" href="#hardwares_available" aria-expanded="false" aria-controls="hardwares_available">
+            <span class="menu-icon">
+            <i class="mdi mdi-laptop"></i>
+            </span>
+            <span class="menu-title">Dispositivos <br>Habilitados</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="hardwares_available">
+            <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/hardwaresAvailable/create">
+                    <i class="fa-solid fa-chevron-right fa-sm me-1"></i> Crear</a>
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="/hardwaresAvailable/list">
+                    <i class="fa-solid fa-chevron-right fa-sm me-1"></i> Lista</a>
+                </li>
+                <!--<li class="nav-item"> <a class="nav-link" href="/hardwares_available/hardwares_list">
+                    <i class="fa-solid fa-chevron-right fa-sm me-1"></i> Lista de dispositivos</a>
+                </li>-->
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item menu-items">
+        <a class="nav-link" data-bs-toggle="collapse" href="#hardwares" aria-expanded="false" aria-controls="hardwares">
+            <span class="menu-icon">
+            <i class="mdi mdi-laptop"></i>
+            </span>
+            <span class="menu-title">Mis Dispositivos</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="hardwares">
+            <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/hardwares/create">
+                    <i class="fa-solid fa-chevron-right fa-sm me-1"></i> Conectar</a>
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="/hardwares/list">
+                    <i class="fa-solid fa-chevron-right fa-sm me-1"></i> Lista</a>
+                </li>
+            </ul>
+        </div>
     </li>
     <li class="nav-item menu-items">
         <a class="nav-link" data-bs-toggle="collapse" href="#user" aria-expanded="false" aria-controls="user">
@@ -146,12 +165,53 @@
         </div>
     </li>
     <li class="nav-item menu-items">
-    <a class="nav-link" href="/reports/">
-        <span class="menu-icon">
-        <i class="mdi mdi-chart-bar"></i>
-        </span>
-        <span class="menu-title">Reportes</span>
-    </a>
+        <a class="nav-link" href="/reports/">
+            <span class="menu-icon">
+            <i class="mdi mdi-chart-bar"></i>
+            </span>
+            <span class="menu-title">Reportes</span>
+        </a>
+    </li>
+    <li class="nav-item menu-items">
+        <a class="nav-link" data-bs-toggle="collapse" href="#tutorials" aria-expanded="false" aria-controls="tutorials">
+            <span class="menu-icon">
+                <i class="mdi mdi-weather-hail"></i>
+            </span>
+            <span class="menu-title">Automatizacion<br> por Temperatura</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="tutorials">
+            <ul class="nav flex-column sub-menu">
+            <li class="nav-item">
+                <div id="cont_d4109cc87b677271adef307e24107bc0">
+                    <script type="text/javascript" async src="https://www.theweather.com/wid_loader/d4109cc87b677271adef307e24107bc0"></script> <!-- Api para temperatura y clima visual -->
+                </div>
+            </li>
+            </ul>
+        </div>
+        <script>
+            
+            setInterval(()=>{
+                fetch("https://api.openweathermap.org/data/2.5/weather?lat=-34.60&lon=-58.38&appid=5bdb60e2819ffc98890bd04cad02b8f9")/* Llave de la api para conexion a dispositivos */
+            .then((data)=>{
+                return data.json()
+            })
+            .then((data)=>{
+                console.log(data)
+                if(data.main.temp < 10 ){
+                    array_dispositivos_frio.forEach(disp => {
+                        disp.activate(data.main.temp)//Activacion de disposito en tiempo real.
+                    });
+                }
+                if(data.main.temp > 30 ){
+                    array_dispositivos_calor.forEach(disp => {
+                        disp.activate(data.main.temp)//Activacion de disposito en tiempo real.
+                    });
+                }
+            });
+            },5000)//Verificacion de temperatura actual cada 1minuto.
+            
+        </script>
     </li>
 </ul>
 </nav>

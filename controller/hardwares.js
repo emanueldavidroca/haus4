@@ -1,26 +1,25 @@
 const session = require("express-session");
 const { Op } = require("sequelize");
-const {users,rols,rolusers,requirements,types,categories,tutorials,rating_technicians} = require("../database/models");
-let requirementsController = {
+const {users,rols,rolusers,hardwares,hardwares_available,types,categories,tutorials,rating_technicians} = require("../database/models");
+let hardwaresController = {
     list:async (req,res) =>{
         try {
-            let list_requirements = await requirements.findAll({where:{status:"pending"},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
-            console.log(list_requirements);
-            res.render("./list_requirements",{list_requirements});
+            let list_hardwares = await hardwares.findAll({where:{status:"pending"},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]},{model: hardwares_available,attributes:["hardware_name"],required:true,as:"hardwares_av"}],order:[["priority","DESC"]]});
+            res.render("./list_hardwares",{list_hardwares});
         } catch (error) {
             console.log(error);
         }
     },
     resolved_list:async (req,res) =>{
         try {
-            let list_requirements = await requirements.findAll({where: {
+            let list_hardwares = await hardwares.findAll({where: {
                 [Op.or]: [
                     { status: "resolved" },
                     { status: "tutorial_sent" },
                 ],
             },include:[{model: users,attributes:["fullName"],required:true,as:"user"}
             ,{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
-            res.render("./resolved_list",{list_requirements});
+            res.render("./resolved_list",{list_hardwares});
         } catch (error) {
             console.log(error);
         }
@@ -29,24 +28,26 @@ let requirementsController = {
         try {
             let technician = await users.findAll({include:{model:rols,where:{rol:"tecnico"}}})
             let categorias = await categories.findAll({include:{model:types}})
-            res.render("./create_requirements",{technician,categorias});
+            let hardwares_av = await hardwares_available.findAll();
+            res.render("./create_hardwares",{technician,categorias,hardwares_av});
         } catch (error) {
-            
+            console.log(error)
         }
         
     },
     store:async (req,res) =>{
         try{
-            const {title,description,typeId,priority,technicianId} = req.body;
+            const {hardware,typeId,priority,technicianId} = req.body;
             sess = req.session;
-            let result = await requirements.create({
-                title,description,typeId,priority,userId:sess.idUser,technicianId
+            let result = await hardwares.create({
+                hardwaresAvailableId:hardware,typeId,priority,userId:sess.idUser,technicianId
             });
+            
             if(result){
-                res.redirect("/requirements/list");
+                res.redirect("/hardwares/list");
             }
             else{
-                res.redirect("/requirements/create");
+                res.redirect("/hardwares/create");
             }
         }
         catch(error){
@@ -55,12 +56,13 @@ let requirementsController = {
     },
     edit: async(req,res)=>{
         try{
-            let requerimiento = await requirements.findOne({where:{id:req.params.id},include:{model:types, include:[{model:categories}]}});
-            let categoria = requerimiento.type.category.dataValues.category;
+            let dispositivo = await hardwares.findOne({where:{id:req.params.id},include:{model:types, include:[{model:categories}]}});
+            let categoria = dispositivo.type.category.dataValues.category;
             let technician = await users.findAll({include:{model:rols,where:{rol:"tecnico"}}})
-            let list_hardware = await types.findAll({where:{categoryId:1}});
-            let list_software = await types.findAll({where:{categoryId:2}});
-            res.render("./create_requirements",{requerimiento,categoria,technician,list_hardware,list_software});
+            let categorias = await categories.findAll({include:{model:types}});
+            let hardwares_av = await hardwares_available.findAll();
+
+            res.render("./create_hardwares",{dispositivo,categorias,technician,categoria,hardwares_av});
         }
         catch(e){
             console.log(e)
@@ -69,14 +71,16 @@ let requirementsController = {
     update: async(req,res)=>{
         try{
             let {id} = req.params;
-            const {title,description,typeId,priority,userId} = req.body;
-            let result = await requirements.update({
-                title,description,typeId,priority,userId
+
+            const {hardware,typeId,priority,technicianId} = req.body;
+            sess = req.session;
+            let result = await hardwares.update({
+                hardwaresAvailableId:hardware,typeId,priority,userId:sess.idUser,technicianId
             },{where:{id}});
             if(result){
-                res.redirect("/requirements/list");
+                res.redirect("/hardwares/list");
             }else{
-                res.redirect("/requirements/edit/"+id);
+                res.redirect("/hardwares/edit/"+id);
             }
         }
         catch(e){
@@ -86,12 +90,12 @@ let requirementsController = {
     remove: async(req,res)=>{
         try {
             if(req.params.id){
-                let remove = requirements.destroy({where:{id:req.params.id}});
+                let remove = hardwares.destroy({where:{id:req.params.id}});
                 if(remove){
-                    res.redirect("/requirements/list");
+                    res.redirect("/hardwares/list");
                 }
                 else{
-                    res.redirect("/requirements/list");
+                    res.redirect("/hardwares/list");
                 }
             }
         } catch (error) {
@@ -101,8 +105,8 @@ let requirementsController = {
     resolveView:async (req,res) =>{
         try {
             let tutoriales = await tutorials.findAll();
-            let resolve = await requirements.findOne({where:{id:req.params.id},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
-            res.render("./resolve_requirements",{resolve,tutoriales});
+            let resolve = await hardwares.findOne({where:{id:req.params.id},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
+            res.render("./resolve_hardwares",{resolve,tutoriales});
         } catch (error) {
             
         }
@@ -111,7 +115,7 @@ let requirementsController = {
     resolved:async (req,res) =>{
         try {
             const {id} = req.params;
-            let resolved = await requirements.findOne({where:{id:req.params.id},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName","id"],required:true,as:"technician"},{model: rating_technicians,attributes:["ratedBy","rating"],required:false},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
+            let resolved = await hardwares.findOne({where:{id:req.params.id},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName","id"],required:true,as:"technician"},{model: rating_technicians,attributes:["ratedBy","rating"],required:false},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
             res.render("./resolved",{resolved});
         } catch (error) {
             
@@ -131,10 +135,10 @@ let requirementsController = {
                     data = {status:"resolved"}
                 }
                 
-                let result = await requirements.update(data,{where:{id}});
+                let result = await hardwares.update(data,{where:{id}});
 
                 if(result){
-                    res.redirect("/requirements/list");
+                    res.redirect("/hardwares/list");
                 }
             }else if(typeof req.body.send_tutorial != "undefined"){
                 let data;
@@ -144,16 +148,16 @@ let requirementsController = {
                     data = {status:"tutorial_sent"}
                 }
 
-                let result = await requirements.update(data,{
+                let result = await hardwares.update(data,{
                     where:{id}
                 });
                 if(result){
-                    res.redirect("/requirements/list");
+                    res.redirect("/hardwares/list");
                 }
             }
             
             else{
-                res.redirect("/requirements/create");
+                res.redirect("/hardwares/create");
             }
         }
         catch(error){
@@ -177,4 +181,4 @@ let requirementsController = {
         }
     },
 }
-module.exports = requirementsController;
+module.exports = hardwaresController;

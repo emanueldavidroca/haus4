@@ -28,6 +28,19 @@ form .form-control:focus{
 .createdBy-text p,.technician-text p{
     margin-bottom: 0px;
 }
+.link-whatsapp{
+    border: 3px #008a20 solid;
+    padding: 5px 30px;
+    color: #008a20;
+    font-size: 2rem;
+    border-radius: 12px;
+    background-color: #fff;
+    display: block;
+    margin: auto;
+    width: 20rem;
+    text-decoration: none;
+    margin-bottom: 2rem;
+}
 @media (min-width: 992px){
     .sidebar-icon-only .sidebar .sidebar-brand-wrapper .brand-logo-mini {
         padding-left: 10px !important;
@@ -127,7 +140,7 @@ textarea.form-control{
 #container-categories .otros ul{
 padding-left: 37px !important;
 }
-#resolveRequirements #description{
+#resolvehardwares #description{
     border: 1px grey solid;
     padding: 10px 8px;
     border-radius: 4px;
@@ -135,28 +148,28 @@ padding-left: 37px !important;
     margin: auto;
     width: 90%;
 }
-#resolveRequirements form{
+#resolvehardwares form{
     display: block;
     margin: auto;
     width: 90%;
     padding: 25px 45px;
 }
-#resolveRequirements .resolve_option{
+#resolvehardwares .resolve_option{
     display: flex;
     justify-content: center;
 }
-#resolveRequirements .resolve_option .btn-tutorial{
+#resolvehardwares .resolve_option .btn-tutorial{
     background-color: #0090E7;
     color: #fff;
 }
-#resolveRequirements .resolve_option .btn-tutorial.active{
+#resolvehardwares .resolve_option .btn-tutorial.active{
     background-color: #d10606;
 }
-#resolveRequirements .resolve_option .btn-tutorial.active::before{
+#resolvehardwares .resolve_option .btn-tutorial.active::before{
     content: "X ";
 }
 
-#resolveRequirements #anotation,#resolveRequirements #description{
+#resolvehardwares #anotation,#resolvehardwares #description{
     width: 90%;
     display: block;
     margin: auto;
@@ -164,11 +177,11 @@ padding-left: 37px !important;
     margin-bottom: 8px;
     background-color: #f2f2f2;
 }
-#resolveRequirements #anotation label,#resolveRequirements #description label{
+#resolvehardwares #anotation label,#resolvehardwares #description label{
     margin-top: 10px;
     margin-bottom: 8px;
 }
-#resolveRequirements #anotation textarea,#resolveRequirements #description textarea{
+#resolvehardwares #anotation textarea,#resolvehardwares #description textarea{
     min-height: 140px;
     border-radius: 4px;
 }
@@ -208,13 +221,13 @@ padding-left: 37px !important;
 #section-tutorial .select2-selection:focus{
     color: #212529 !important;
 }
-#resolveRequirements #tutorial-wrapper{
+#resolvehardwares #tutorial-wrapper{
     width: 80%;
     display: block;
     margin: auto;
     position: relative;
 }
-#resolveRequirements #tutorial-wrapper #icon-check{
+#resolvehardwares #tutorial-wrapper #icon-check{
     position:absolute;
     top: 2px;
     left: -35px;
@@ -222,10 +235,10 @@ padding-left: 37px !important;
     /*border: 1px #008A20 solid;
     border-radius: 3px;*/
 }
-#resolveRequirements #tutorial-wrapper #icon-check.show{
+#resolvehardwares #tutorial-wrapper #icon-check.show{
     display: block;
 }
-#resolveRequirements #section-tutorial{
+#resolvehardwares #section-tutorial{
     border: 2px  #0090E7 solid;
     border-radius: 4px;
     margin-top: 20px !important;
@@ -234,12 +247,12 @@ padding-left: 37px !important;
     margin: auto;
     display: block;
 }
-#resolveRequirements #section-tutorial .select2{
+#resolvehardwares #section-tutorial .select2{
     width: 100% !important;
     display: block;
     margin: 15px auto;
 }
-#resolveRequirements #section-tutorial button{
+#resolvehardwares #section-tutorial button{
     border: 2px #0090E7 solid;
     font-size: 16px;
     color: #0090E7;
@@ -248,11 +261,11 @@ padding-left: 37px !important;
     font-weight: bold;
     transition: all 0.35s;
 }
-#resolveRequirements #section-tutorial button:hover{
+#resolvehardwares #section-tutorial button:hover{
     background-color: #0090E7 !important;
     color: #fff !important;
 }
-#resolveRequirements #section-tutorial p{
+#resolvehardwares #section-tutorial p{
     text-align: center;
     color: #fff;
     background-color: #0090E7;

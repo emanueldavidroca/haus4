@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
         types.belongsTo(models.categories,{foreignKey:"categoryId"});
         types.hasOne(models.tutorials);
-        types.hasOne(models.requirements);
+        types.hasOne(models.hardwares);
     }
   }
   types.init({

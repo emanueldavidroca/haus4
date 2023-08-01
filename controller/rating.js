@@ -1,13 +1,13 @@
 const session = require("express-session");
 const { Op } = require("sequelize");
-const {rating_technicians,requirements,users,types} = require("../database/models");
+const {rating_technicians,harwares,users,types} = require("../database/models");
 let ratingController = {
     index: (req, res) => {
         res.render("./index");
     },
     mylist: async(req, res) => {
         sess = req.session;
-        let list_ratings = await rating_technicians.findAll({where:{technicianId:sess.idUser},include:[{model:requirements,required:true},{model:users,as:"user",required:true}]});
+        let list_ratings = await rating_technicians.findAll({where:{technicianId:sess.idUser},include:[{model:harwares,required:true},{model:users,as:"user",required:true}]});
         res.render("./list_myratings",{list_ratings});
     },
     lista: (req, res) => {
@@ -32,7 +32,7 @@ let ratingController = {
                 console.log(req.body);
                 console.log(req.params);
             }
-            res.redirect("/requirements/resolved/"+id);
+            res.redirect("/harwares/resolved/"+id);
         } catch (error) {
             console.log(error)
         }

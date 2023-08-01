@@ -20227,15 +20227,17 @@ div.tagsinput {
           display: flex;
           font-weight: normal;
           align-items: center; }
-          .navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .navbar-profile .navbar-profile-name {
+        .navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .navbar-profile .navbar-profile-name {
             white-space: nowrap;
             margin-left: 1rem; }
-          .navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .navbar-profile i {
+        .navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .navbar-profile i {
             color: #a7afb7; }
         .navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link.create-new-button {
           padding: 0.375rem 0.75rem; border:1px solid #E75D01;}
-      .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown {
-        line-height: 1rem; }
+        .navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link.chat-button {
+            padding: 0.375rem 0.75rem; background-color: #E75D01; color:#fff;}
+        .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown {
+          line-height: 1rem; }
         .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-toggle:after {
           color: #0090e7;
           font-size: 1rem; }
