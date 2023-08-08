@@ -9,12 +9,14 @@
     <!-- partial -->
     <div class="main-panel">
 <!-- CONTENIDO -->
+<div id="loading"></div>
+
 <div class="content-wrapper">
     <div class="col-8" style="margin: auto;">
         <div class="card">
         <div class="card-body pb-2">
             <h3 class="card-title">Conectar Dispositivo</h3>
-            <form class="form-sample" action="/hardwares/connect/<%- dispositivo.id %>?_method=PUT" method="post">
+            <form class="form-sample" action="/hardwares/connect/<%- dispositivo.id %>?_method=PUT" id="connect-form" method="post">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group row">
@@ -31,7 +33,7 @@
                     </div>
                 </div>
                 <div class="btn-wrapper">
-                    <button type="submit" class="btn btn-success btn-center">Conectar</button>
+                    <button onClick="conectar(this)" value="<%- dispositivo.id %>" type="button" class="btn btn-success btn-center" >Conectar</button>
                 </div>
             </form>
         </div>
@@ -48,6 +50,21 @@
         });
     }
 </script>
-
+<script>
+    function conectar(id){
+        if(document.querySelector("#driverId").options[document.querySelector("#driverId").selectedIndex].value != "-1"){
+            document.querySelector("body").classList.add("loading");
+            document.querySelector("#loading").innerHTML = '<p>Conectando dispositivo...</p><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>';
+            
+            setTimeout(()=>{
+            document.querySelector("#connect-form").submit();
+            },(Math.floor(Math.random() * 10) + 1 ) *1000);
+        }
+        else{
+            document.querySelector("#driverId").classList.add("border-danger");
+        }
+       
+    }
+  </script>
 <!-- FIN contenido -->
 <%- include("partials/footer") %>

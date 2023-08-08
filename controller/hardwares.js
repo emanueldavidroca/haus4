@@ -37,8 +37,13 @@ let hardwaresController = {
     },
     store:async (req,res) =>{
         try{
-            const {hardware,typeId,priority,technicianId} = req.body;
             sess = req.session;
+            let result_hardwares = await hardwares.findAll({where:{userId:sess.idUser},include:{model:hardwares_available,as:"hardwares_av",required:true}});
+            sess.hardwares = result_hardwares;
+            const {hardware,typeId,priority,technicianId} = req.body;
+            req.session.save(function(err) {
+                console.log("saved");
+            })
             let result = await hardwares.create({
                 hardwaresAvailableId:hardware,typeId,priority,userId:sess.idUser,technicianId
             });
@@ -103,6 +108,11 @@ let hardwaresController = {
             let {id} = req.params;
             const {driverId} = req.body;
             sess = req.session;
+            let result_hardwares = await hardwares.findAll({where:{userId:sess.idUser},include:{model:hardwares_available,as:"hardwares_av",required:true}});
+            sess.hardwares = result_hardwares;
+            req.session.save(function(err) {
+                console.log("saved");
+            })
             let result = await hardwares.update({
                 status:"connected",driverId:driverId
             },{where:{id}});

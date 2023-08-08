@@ -1,5 +1,7 @@
 <% if (session.hardwares) { %>
     <% Array.prototype.forEach.call(session.hardwares ,hard => { %>
+        <% if (hard.status != "connected") { %>
+         
         <input type="hidden" class="hardwares_by_user" value="<%- hard.hardwares_av.hardware_name %>" data-hardware-id="<%- hard.hardwares_av.id %>" data-cold-temp="<%- hard.hardwares_av.startingColdTemp %>" data-warm-temp="<%- hard.hardwares_av.startingWarmTemp %>">  
 
         <div role="alert" aria-live="assertive" aria-atomic="true" class="toast  position-fixed bottom-0 end-0" style="z-index:100" id="hardwares-<%- hard.hardwares_av.id %>" data-bs-autohide="false">
@@ -10,28 +12,31 @@
             <div class="toast-body text-dark">
                 
             </div>
-          </div>
+        </div>
+        <% } %>
     <% }) %>    
 <% } %>
-<script>       
+<script>   
+    //Intervalo de 10segundos para que verifique la temperatura rutinariamente    
     setInterval(()=>{
         fetch("https://api.openweathermap.org/data/2.5/weather?lat=-34.60&lon=-58.38&appid=5bdb60e2819ffc98890bd04cad02b8f9")/* Llave de la api para conexion a dispositivos */
     .then((data)=>{
-        return data.json()
+        return data.json()//convertir datos de la api de json a Objeto.
     })
     .then((data)=>{
-        let hardwares_input = document.querySelectorAll(".hardwares_by_user");
-        hardwares_input.forEach(h => {
+        let hardwares_input = document.querySelectorAll(".hardwares_by_user");//trae todos los dispositivos a conectar.
+        hardwares_input.forEach(h => {//recorre uno por uno para verificar si hay que activarlos por temp.
             if(h.classList.contains("active") == false){
+                //Validacion para activacion por FRIO
+                //Compara la temp de la api con la temp del dispositivo
                 if((data.main.temp)/32 < h.dataset.coldTemp){
-                    console.log("frio")
                     let toast = document.querySelector("#hardwares-"+h.dataset.hardwareId);
                     new bootstrap.Toast(toast).show();
                     h.classList.add("active");
                     toast.querySelector(".toast-body").innerHTML = "Se activo el dispositivo automaticamente debido a la temperatura de tu region. (FRIO) <br><br> Temp de activacion del dispositivo :<b>"+h.dataset.coldTemp+"°</b><br>Temperatura actual :<b>"+parseInt((data.main.temp)/32)+"°</b>";
                 }
+                //Validacion para activacon por calor
                 if((data.main.temp)/32 > h.dataset.warmTemp){
-                    console.log("calor")
                     let toast = document.querySelector("#hardwares-"+h.dataset.hardwareId);
                     new bootstrap.Toast(toast).show();
                     h.classList.add("active");
@@ -41,6 +46,6 @@
             
         });
     });
-    },15000)//Verificacion de temperatura actual cada 1minuto.
+    },10000)//Verificacion de temperatura actual cada 1minuto.
     
 </script>

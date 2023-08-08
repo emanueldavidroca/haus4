@@ -46,7 +46,7 @@
             <form action=<%="/ratings/rating_technician/"+resolved.id+"?_method=PUT" %>  method="post" class="row justify-content-center">
               
                 <section class="bg-light col-md-3 rounded-3 py-2 my-3">
-                    <p class="text-center text-dark fs-6">Valorar al Tecnico: <span class="fs-5 text-orange"><%= resolved.user.dataValues.fullName %></span></p>
+                    <p class="text-center text-dark fs-6">Valorar al Tecnico: <span class="fs-5 text-orange"><%= resolved.technician.dataValues.fullName %></span></p>
                       <% let rating = 0;
                        if (resolved.rating_technician && resolved.rating_technician.dataValues.rating) {
                         rating = resolved.rating_technician.dataValues.rating;
@@ -69,7 +69,7 @@
                         </button>
                     </div>
                     <input type="hidden" id="rating_value" name="rating_value" value="-1">
-                    <input type="hidden" id="technicianId" name="technicianId" value="<%= resolved.technician.dataValues.id %>">
+                    <input type="hidden" id="technicianId" name="technicianId" value="<%= resolved.technicianId %>">
                     <button class="btn btn-warning mx-auto d-block mt-4 fs-5 py-2 px-3 fw-semibold disabled" id="send-rating" type="submit"> <i class="fa-solid fa-check"></i>Valorar</button>
                 </section>
               </form>

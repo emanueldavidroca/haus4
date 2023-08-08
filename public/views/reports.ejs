@@ -37,7 +37,7 @@
           <div class="row">
             <div class="col-9">
               <div class="d-flex align-items-center align-self-start">
-                <h3 class="mb-0"><%= myresolves %> <i class="fa-solid fa-check text-orange fa-lg ms-1"></i></h3>
+                <h3 class="mb-0"><%= myconnections %> <i class="fa-solid fa-check text-success fa-lg ms-1"></i></h3>
               </div>
             </div>
             <div class="col-3">
@@ -46,7 +46,7 @@
               </div>
             </div>
           </div>
-          <h6 class="text-muted font-weight-bold">Mis reparaciones</h6>
+          <h6 class="text-muted font-weight-bold">Mis Conexiones</h6>
         </div>
       </div>
     </div>
@@ -82,7 +82,7 @@
     <div class="col-md-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Tecnicos con mas reparaciones</h4>
+          <h4 class="card-title">Tecnicos con mas conexiones</h4>
           <canvas id="barChartResolved" style="height:230px"></canvas>
         </div>
       </div>
@@ -123,10 +123,10 @@
     }]
   };
   var data_resolved = {
-    labels: "<%= mostResolved.tecnicos %>".split(","),
+    labels: "<%= mostConnected.tecnicos %>".split(","),
     datasets: [{
       label: '# Cantidad de resueltos',
-      data: "<%= mostResolved.cantidad %>".split(","),
+      data: "<%= mostConnected.cantidad %>".split(","),
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',

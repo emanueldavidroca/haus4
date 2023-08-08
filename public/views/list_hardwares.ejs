@@ -20,7 +20,6 @@
     });
 }
 </script>
-<div id="loading"></div>
 <div class="main-panel">
     <!-- CONTENIDO -->
     <div class="content-wrapper">
@@ -80,10 +79,10 @@
                                     </td>
                                     <td class="text-center">
                                         <% if(hard.status == "pending"){ %>
-                                            <button onClick="conectar(this)" value="<%- hard.id %>" class="btn btn-success" >Conectar</button>
+                                            <a href="/hardwares/connect/<%= hard.id %>" class="btn btn-success">Conectar</a>
                                         <% } %>
                                         <% if(hard.status == "connected" && !hard.rating_technician){ %>
-                                            <a href="/hardwares/resolver/<%= hard.id %>" class="btn btn-success">Calificar</a>
+                                            <a href="/hardwares/resolver/<%= hard.id %>" class="btn btn-warning"><i class="fa-solid fa-star"></i>Calificar</a>
                                         <% } %>
                                         <a href="/hardwares/edit/<%= hard.id %>" class="btn btn-primary">Editar</a>
                                         <a href="/hardwares/delete/<%= hard.id %>" class="btn btn-danger">Desconectar</a>
@@ -107,13 +106,5 @@
         </div>
     </div>
   <!-- FIN contenido -->
-  <script>
-    function conectar(id){
-        document.querySelector("#loading").innerHTML = '<div class="lds-ellipsis"><p>Conectando dispositivo...</><div></div><div></div><div></div><div></div></div>';
-        
-        setTimeout(()=>{
-            window.location.replace("http://localhost:3001/hardwares/connect/"+id);
-        },105000);
-    }
-  </script>
+
 <%- include("partials/footer") %>
