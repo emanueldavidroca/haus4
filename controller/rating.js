@@ -18,21 +18,17 @@ let ratingController = {
             const {id} = req.params;
             const {rating_value,technicianId} = req.body;
             sess = req.session;
-            let is_rated = await rating_technicians.findOne({where:{requirementId:req.params.id}});
+            let is_rated = await rating_technicians.findOne({where:{hardwareId:req.params.id}});
             if(is_rated){
                 let result = await rating_technicians.update({
                     rating:rating_value,ratedBy:sess.idUser,technicianId:technicianId
-                },{where:{requirementId:id}});
-                console.log(result);
+                },{where:{hardwareId:id}});
             }else{
                 let result = await rating_technicians.create({
-                    rating:rating_value,ratedBy:sess.idUser,requirementId:id,technicianId:technicianId
+                    rating:rating_value,ratedBy:sess.idUser,hardwareId:id,technicianId:technicianId
                 });
-                console.log(result);
-                console.log(req.body);
-                console.log(req.params);
             }
-            res.redirect("/harwares/resolved/"+id);
+            res.redirect("/hardwares/list/");
         } catch (error) {
             console.log(error)
         }

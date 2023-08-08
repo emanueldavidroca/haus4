@@ -1,0 +1,46 @@
+<% if (session.hardwares) { %>
+    <% Array.prototype.forEach.call(session.hardwares ,hard => { %>
+        <input type="hidden" class="hardwares_by_user" value="<%- hard.hardwares_av.hardware_name %>" data-hardware-id="<%- hard.hardwares_av.id %>" data-cold-temp="<%- hard.hardwares_av.startingColdTemp %>" data-warm-temp="<%- hard.hardwares_av.startingWarmTemp %>">  
+
+        <div role="alert" aria-live="assertive" aria-atomic="true" class="toast  position-fixed bottom-0 end-0" style="z-index:100" id="hardwares-<%- hard.hardwares_av.id %>" data-bs-autohide="false">
+            <div class="toast-header">
+              <span>Dispositivo:</span><strong class="me-auto text-primary"><%- hard.hardwares_av.hardware_name %></strong>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body text-dark">
+                
+            </div>
+          </div>
+    <% }) %>    
+<% } %>
+<script>       
+    setInterval(()=>{
+        fetch("https://api.openweathermap.org/data/2.5/weather?lat=-34.60&lon=-58.38&appid=5bdb60e2819ffc98890bd04cad02b8f9")/* Llave de la api para conexion a dispositivos */
+    .then((data)=>{
+        return data.json()
+    })
+    .then((data)=>{
+        let hardwares_input = document.querySelectorAll(".hardwares_by_user");
+        hardwares_input.forEach(h => {
+            if(h.classList.contains("active") == false){
+                if((data.main.temp)/32 < h.dataset.coldTemp){
+                    console.log("frio")
+                    let toast = document.querySelector("#hardwares-"+h.dataset.hardwareId);
+                    new bootstrap.Toast(toast).show();
+                    h.classList.add("active");
+                    toast.querySelector(".toast-body").innerHTML = "Se activo el dispositivo automaticamente debido a la temperatura de tu region. (FRIO) <br><br> Temp de activacion del dispositivo :<b>"+h.dataset.coldTemp+"°</b><br>Temperatura actual :<b>"+parseInt((data.main.temp)/32)+"°</b>";
+                }
+                if((data.main.temp)/32 > h.dataset.warmTemp){
+                    console.log("calor")
+                    let toast = document.querySelector("#hardwares-"+h.dataset.hardwareId);
+                    new bootstrap.Toast(toast).show();
+                    h.classList.add("active");
+                    toast.querySelector(".toast-body").innerHTML = "Se activo el dispositivo automaticamente debido a la temperatura de tu region. (CALOR) <br><br> Temp de activacion del dispositivo :<b>"+h.dataset.warmTemp+"°</b><br>Temperatura actual :<b>"+parseInt((data.main.temp)/32)+"°</b>";
+                }
+            }
+            
+        });
+    });
+    },15000)//Verificacion de temperatura actual cada 1minuto.
+    
+</script>

@@ -1,0 +1,53 @@
+<%- include("./partials/head") %>
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include("./partials/sidebar") %>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <%- include("./partials/navbar") %>
+    <!-- partial -->
+    <div class="main-panel">
+<!-- CONTENIDO -->
+<div class="content-wrapper">
+    <div class="col-8" style="margin: auto;">
+        <div class="card">
+        <div class="card-body pb-2">
+            <h3 class="card-title">Conectar Dispositivo</h3>
+            <form class="form-sample" action="/hardwares/connect/<%- dispositivo.id %>?_method=PUT" method="post">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Asignar a driver</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="driverId" required name="driverId">
+                                    <option value="-1">Seleccionar un driver</option>
+                                        <% driver_list.forEach(d=> { %>
+                                            <option value="<%= d.id %>"><%= d.name %></option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-wrapper">
+                    <button type="submit" class="btn btn-success btn-center">Conectar</button>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload= ()=>{
+        $("#create_user_rols").select2({
+            multiple:true,
+            maximumSelectionLength: 5,
+            placeholder: 'Seleccionar driver',
+            allowClear: true
+        });
+    }
+</script>
+
+<!-- FIN contenido -->
+<%- include("partials/footer") %>

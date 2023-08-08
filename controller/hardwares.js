@@ -1,10 +1,10 @@
 const session = require("express-session");
 const { Op } = require("sequelize");
-const {users,rols,rolusers,hardwares,hardwares_available,types,categories,tutorials,rating_technicians} = require("../database/models");
+const {users,rols,rolusers,hardwares,hardwares_available,types,categories,drivers,tutorials,rating_technicians} = require("../database/models");
 let hardwaresController = {
     list:async (req,res) =>{
         try {
-            let list_hardwares = await hardwares.findAll({where:{status:"pending"},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]},{model: hardwares_available,attributes:["hardware_name"],required:true,as:"hardwares_av"}],order:[["priority","DESC"]]});
+            let list_hardwares = await hardwares.findAll({include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]},{model: rating_technicians,attributes:["ratedBy","rating"],required:false},{model: hardwares_available,attributes:["hardware_name"],required:true,as:"hardwares_av"}],order:[["priority","DESC"]]});
             res.render("./list_hardwares",{list_hardwares});
         } catch (error) {
             console.log(error);
@@ -87,6 +87,35 @@ let hardwaresController = {
             console.log(e)
         }
     },
+    connect: async(req,res)=>{
+        try {
+            let {id} = req.params;
+            let technician = await users.findAll({include:{model:rols,where:{rol:"tecnico"}}})
+            let driver_list = await drivers.findAll()
+            let dispositivo = await hardwares.findOne({where:{id}});
+            res.render("./connect_hardware",{technician,driver_list,dispositivo});
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    connecting: async(req,res)=>{
+        try{
+            let {id} = req.params;
+            const {driverId} = req.body;
+            sess = req.session;
+            let result = await hardwares.update({
+                status:"connected",driverId:driverId
+            },{where:{id}});
+            if(result){
+                res.redirect("/hardwares/list");
+            }else{
+                res.redirect("/hardwares/connect/"+id);
+            }
+        }
+        catch(e){
+            console.log(e)
+        }
+    },
     remove: async(req,res)=>{
         try {
             if(req.params.id){
@@ -102,25 +131,22 @@ let hardwaresController = {
             console.log(error);
         }
     },
-    resolveView:async (req,res) =>{
+    resolver:async (req,res) =>{
         try {
             let tutoriales = await tutorials.findAll();
-            let resolve = await hardwares.findOne({where:{id:req.params.id},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
-            res.render("./resolve_hardwares",{resolve,tutoriales});
+            let resolved = await hardwares.findOne({where:{id:req.params.id},include:[{model: hardwares_available,attributes:["hardware_name"],required:true,as:"hardwares_av"},{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName"],required:true,as:"technician"},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
+            res.render("./resolved",{resolved,tutoriales});
         } catch (error) {
-            
+            console.log(error);
         }
-        
     },
     resolved:async (req,res) =>{
         try {
             const {id} = req.params;
-            let resolved = await hardwares.findOne({where:{id:req.params.id},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName","id"],required:true,as:"technician"},{model: rating_technicians,attributes:["ratedBy","rating"],required:false},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
+            let resolved = await hardwares.findOne({where:{id:id},include:[{model: users,attributes:["fullName"],required:true,as:"user"},{model: users,attributes:["fullName","id"],required:true,as:"technician"},{model: rating_technicians,attributes:["ratedBy","rating"],required:false},{model:types, include:[{model:categories}]}],order:[["priority","DESC"]]});
             res.render("./resolved",{resolved});
-        } catch (error) {
-            
+        } catch (error) { 
         }
-        
     },
 
     resolveStore:async (req,res) =>{
@@ -134,7 +160,6 @@ let hardwaresController = {
                 }else{
                     data = {status:"resolved"}
                 }
-                
                 let result = await hardwares.update(data,{where:{id}});
 
                 if(result){

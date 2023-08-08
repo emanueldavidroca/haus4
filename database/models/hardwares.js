@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       hardwares.belongsTo(models.hardwares_available,{foreignKey:"hardwaresAvailableId",as:'hardwares_av',targetKey: 'id'});
       hardwares.belongsTo(models.types,{foreignKey:"typeId"});  
       hardwares.hasOne(models.rating_technicians);  
+      hardwares.belongsTo(models.drivers,{foreignKey:"driverId",as:'driver',targetKey: 'id'});  
     }
   }
   hardwares.init({
@@ -25,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     typeId: DataTypes.INTEGER,
     status: DataTypes.STRING,
     priority: DataTypes.INTEGER,
+    driverId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'hardwares',

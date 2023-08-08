@@ -17,7 +17,7 @@
               <div class="row justify-content-center">
                   <div class="idRequerement fw-bold">#<%= resolved.id %></div>
                   <div class="col-md-10 text-center">
-                      <h3 class="card-title"><span style="font-weight: 300;">Resolucion de :</span> <span class="fw-bold">"<%= resolved.title %>"</span></h3>
+                      <h3 class="card-title"><span style="font-weight: 300;">Resolucion de :</span> <span class="fw-bold">"<%= resolved.hardwares_av.hardware_name %>"</span></h3>
                       <hr style="width:35%;" class=" mx-auto d-block">
                   </div>
                   <div class="col-md-11 row">
@@ -40,14 +40,7 @@
                   
               </div>
             </div>
-            <div class="form-group" id="description">
-              <h5 for="description">Descripcion</h5>
-              <p><%= resolved.description %></p>
-            </div>
-            <div id="anotation" >
-              <label for="">Anotaciones</label>
-              <p class="form-control"><%= resolved.anotation %></p>
-            </div>
+          
             <p class="text-center mt-4">No te olvides de valorar al tecnico, tu valoracion sumara en la estadistica del mismo.</p>
             <hr class="w-25 mx-auto">
             <form action=<%="/ratings/rating_technician/"+resolved.id+"?_method=PUT" %>  method="post" class="row justify-content-center">

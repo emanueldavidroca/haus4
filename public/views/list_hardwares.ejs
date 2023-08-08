@@ -20,6 +20,7 @@
     });
 }
 </script>
+<div id="loading"></div>
 <div class="main-panel">
     <!-- CONTENIDO -->
     <div class="content-wrapper">
@@ -38,6 +39,7 @@
                                 <th> Tecnico </th>
                                 <th> Creado por </th>
                                 <th> Categoria/Tipo </th>
+                                <th> Calificacion</th>
                                 <th> Estado</th>
                                 <th class="text-center"> Acciones </th>
                             </tr>
@@ -58,23 +60,33 @@
                                     <td class="fs-6 fw-bold" style="text-transform: capitalize;"><%= hard.technician.dataValues.fullName %></td>
                                     <td class="fs-6 fw-bold" style="text-transform: capitalize;"><%= hard.user.dataValues.fullName %></td>
                                     <td class="fs-6"><%= hard.type.category.dataValues.category %> / <%= hard.type.dataValues.type ?? "" %></td>
+                                    
+                                    <% if (hard.rating_technician) { %>
+                                        <td class="fs-6"><i class="fa-solid fa-star text-warning"></i> <%= hard.rating_technician.dataValues.rating %></td>
+                                    <% }else{ %>
+                                        <td class="fs-6"><i class="fa-solid fa-star"></i> - </td>
+                                    <% } %>
+                                    
                                     <td class="fs-6">
                                         <% if(hard.status == "tutorial_sent"){ %> 
                                             <span class="text-warning">Tutorial enviado</span> 
                                         <% } %>
-                                        <% if(hard.status == "resolved"){%>
-                                            <span class="text-orange">Resuelto</span> 
+                                        <% if(hard.status == "connected"){ %>
+                                            <span class="text-primary">Conectado</span> 
                                         <% } %>
-                                        <% if(hard.status == "pending"){%>
+                                        <% if(hard.status == "pending"){ %>
                                             <span class="text-orange">En espera</span> 
                                         <% } %>
                                     </td>
                                     <td class="text-center">
-                                        <% if(hard.technicianId == sess.idUser){ %> 
-                                            <a href="/hardwares/resolve/<%= hard.id %>" class="btn btn-success">Resolver</a>
+                                        <% if(hard.status == "pending"){ %>
+                                            <button onClick="conectar(this)" value="<%- hard.id %>" class="btn btn-success" >Conectar</button>
+                                        <% } %>
+                                        <% if(hard.status == "connected" && !hard.rating_technician){ %>
+                                            <a href="/hardwares/resolver/<%= hard.id %>" class="btn btn-success">Calificar</a>
                                         <% } %>
                                         <a href="/hardwares/edit/<%= hard.id %>" class="btn btn-primary">Editar</a>
-                                        <a href="/hardwares/delete/<%= hard.id %>" class="btn btn-danger">Eliminar</a>
+                                        <a href="/hardwares/delete/<%= hard.id %>" class="btn btn-danger">Desconectar</a>
                                     </td>
                                 </tr>
                             <% }) %>
@@ -95,4 +107,13 @@
         </div>
     </div>
   <!-- FIN contenido -->
+  <script>
+    function conectar(id){
+        document.querySelector("#loading").innerHTML = '<div class="lds-ellipsis"><p>Conectando dispositivo...</><div></div><div></div><div></div><div></div></div>';
+        
+        setTimeout(()=>{
+            window.location.replace("http://localhost:3001/hardwares/connect/"+id);
+        },105000);
+    }
+  </script>
 <%- include("partials/footer") %>

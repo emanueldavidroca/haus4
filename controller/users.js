@@ -1,5 +1,5 @@
 const session = require("express-session");
-const {users,rols,rolusers} = require("../database/models");
+const {users,rols,rolusers,hardwares_available,hardwares} = require("../database/models");
 
 let usersController = {
     list:async (req,res) =>{
@@ -35,16 +35,18 @@ let usersController = {
         try{
             const {password,email} = req.body;
             let result = await users.findOne({where:{password:password,email:email},include:{model:rols,required:false}});
+            
             if(result){
+                let result_hardwares = await hardwares.findAll({where:{userId:result.id},include:{model:hardwares_available,as:"hardwares_av",required:true}});
                 sess = req.session;
                 sess.email = result.email;
                 sess.fullName = result.fullName;
+                sess.hardwares = result_hardwares;
                 sess.idUser = result.id;
                 if(result.rols.length > 0){
                     sess.rols = result.rols;
                 }
                 sess.username = result.username;
-                console.log(sess)
                 req.session.save(function(err) {
                     console.log("saved");
                 })

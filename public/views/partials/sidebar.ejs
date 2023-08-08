@@ -189,29 +189,7 @@
             </li>
             </ul>
         </div>
-        <script>
-            
-            setInterval(()=>{
-                fetch("https://api.openweathermap.org/data/2.5/weather?lat=-34.60&lon=-58.38&appid=5bdb60e2819ffc98890bd04cad02b8f9")/* Llave de la api para conexion a dispositivos */
-            .then((data)=>{
-                return data.json()
-            })
-            .then((data)=>{
-                console.log(data)
-                if(data.main.temp < 10 ){
-                    array_dispositivos_frio.forEach(disp => {
-                        disp.activate(data.main.temp)//Activacion de disposito en tiempo real.
-                    });
-                }
-                if(data.main.temp > 30 ){
-                    array_dispositivos_calor.forEach(disp => {
-                        disp.activate(data.main.temp)//Activacion de disposito en tiempo real.
-                    });
-                }
-            });
-            },5000)//Verificacion de temperatura actual cada 1minuto.
-            
-        </script>
+
     </li>
 </ul>
 </nav>

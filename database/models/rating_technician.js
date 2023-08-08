@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
         rating_technicians.belongsTo(models.users,{foreignKey:"technicianId",as:'technician',targetKey: 'id'});
         rating_technicians.belongsTo(models.users,{foreignKey:"ratedBy",as:'user',targetKey: 'id'});
-        rating_technicians.belongsTo(models.hardwares,{foreignKey:"hardwaresId"});  
+        rating_technicians.belongsTo(models.hardwares,{foreignKey:"hardwareId",as:'hardwares',targetKey: 'id'});  
     }
   }
   rating_technicians.init({
-    hardwaresId: DataTypes.STRING,
+    hardwareId: DataTypes.INTEGER,
     rating: DataTypes.STRING,
     ratedBy: DataTypes.INTEGER,
     technicianId: DataTypes.INTEGER,
